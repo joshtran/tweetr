@@ -5,7 +5,6 @@ html {
   box-sizing: inherit;
 }
 
-
 #nav-bar {
   position: fixed;
   padding: 0 2em 0;
@@ -27,4 +26,24 @@ html {
   font-size: 2em;
   line-height: 80px;
   float: left;
+}
+
+#nav-right {
+  float: right;
+}
+
+#compose {
+  margin: 10px 0 10px 0;
+  padding: 15px 5px;
+  border: 1px solid #333;
+  color: #244751;
+  background-color: #eee;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1.2em;
+  border-radius: 7px;
+}
+
+#nav-right:hover #compose {
+  color: #00a087;
+  background-color: #e8f2f1;
 }

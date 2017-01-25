@@ -101,14 +101,12 @@ $(document).ready(function() {
     event.preventDefault();
     //Validation variable
     let $submission = $(this).find('textarea').val().length
-
     //Validate submission
     if ($submission === 0) {
       alert("no tweet");
     } else if ($submission > 140) {
       alert("too many characters");
     } else {
-
       //Submit the form using Ajax
       $.ajax({
         url: '/tweets/',
@@ -119,18 +117,15 @@ $(document).ready(function() {
           url: 'http://localhost:8080/tweets',
           method: 'GET',
           success: function (getTweets) {
-            console.log(getTweets[getTweets.length - 1]);
             let inputArr = [];
             inputArr.push(getTweets[getTweets.length - 1]);
-            console.log(inputArr);
             renderTweets(inputArr);
           }
         });
       });
-
+      $(this).find('textarea').val("");
     }
 
+
   });
-
-
 });

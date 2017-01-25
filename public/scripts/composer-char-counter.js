@@ -11,9 +11,15 @@ $(document).ready(function() {
   }
 
   $('.new-tweet').find('textarea').on('keydown', function () {
-      let counter = 139 - $(this).val().length;
-      charCounter.text(counter);
-      checkCounter(counter);
+    let counter = 139 - $(this).val().length;
+    charCounter.text(counter);
+    checkCounter(counter);
+  });
+
+  $('form[action="/tweets/"]').on('submit', function () {
+    let counter = 140 - $(this).val().length;
+    charCounter.text(counter);
+    checkCounter(counter);
   });
 
 });
