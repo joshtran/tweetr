@@ -1,10 +1,3 @@
-html {
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
 #nav-bar {
   position: fixed;
   padding: 0 2em 0;
@@ -14,18 +7,18 @@ html {
   background-color: #00a087;
   font-color: #e8fdff;
   z-index: 5;
-}
 
-#nav-bar .logo {
-  height: 80px;
-  width: 80px;
-  float: left;
-}
+  .logo {
+    height: 80px;
+    width: 80px;
+    float: left;
+  }
 
-#nav-bar .header {
-  font-size: 2em;
-  line-height: 80px;
-  float: left;
+  .header {
+    font-size: 2em;
+    line-height: 80px;
+    float: left;
+  }
 }
 
 #nav-right {
@@ -36,14 +29,25 @@ html {
   margin: 10px 0 10px 0;
   padding: 15px 5px;
   border: 1px solid #333;
-  color: #244751;
+  color: #19a8b9;
   background-color: #eee;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 1.2em;
   border-radius: 7px;
 }
 
-#nav-right:hover #compose {
-  color: #00a087;
+#compose:hover {
+  color: #244751;
   background-color: #e8f2f1;
+}
+
+#compose-unselected {
+  @extend #compose;
+  color: #244751;
+  background-color: #e8f2f1;
+}
+
+#compose-unselected:hover {
+  color: #19a8b9;
+  background-color: #eee;
 }

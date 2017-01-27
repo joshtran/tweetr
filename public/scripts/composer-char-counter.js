@@ -10,8 +10,8 @@ $(document).ready(function() {
     return;
   }
 
-  $('.new-tweet').find('textarea').on('keydown', function () {
-    let counter = 139 - $(this).val().length;
+  $('.new-tweet').find('textarea').on('keyup', function () {
+    let counter = 140 - $(this).val().length;
     charCounter.text(counter);
     checkCounter(counter);
   });

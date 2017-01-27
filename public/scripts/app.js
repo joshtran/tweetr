@@ -22,10 +22,20 @@ $(document).ready(function() {
     // what's left is seconds
     var seconds = delta % 60;
 
-   if (days > 0) {
+    if (days > 1) {
       return days + " days ago";
-    } else {
+    }
+    if (days === 1) {
+      return days + " day ago";
+    }
+    if (days < 1 && minutes < 60) {
       return minutes + " minutes ago";
+    }
+    if (minutes === 60) {
+      return hours + " hour ago";
+    }
+    if (minutes > 60) {
+      return hours + " hours ago"
     }
   }
 
@@ -41,7 +51,6 @@ $(document).ready(function() {
 
   loadTweets();
 
-
   function renderTweets(tweetArray) {
     // loops through tweets
     for (let key in tweetArray) {
@@ -50,6 +59,12 @@ $(document).ready(function() {
       // takes return value and appends it to the tweets container
       $('.display-tweet').prepend(currentTweet);
     }
+    //Must wait for DOM elements to be generated before trying to access them for like button
+    $('.like').on('click', function() {
+      event.preventDefault();
+      $(this).attr('id', 'selected');
+
+    });
   }
 
   function createTweetElement(tweetObj) {
@@ -65,15 +80,15 @@ $(document).ready(function() {
     let tweetHandle = $("<span>").addClass("handle").append(tweetObj["user"].handle);
 
     //plug into header
-    $(tweetHeader).append(tweetAvatar);
-    $(tweetHeader).append(tweetUsername);
-    $(tweetHeader).append(tweetHandle);
+    tweetHeader.append(tweetAvatar);
+    tweetHeader.append(tweetUsername);
+    tweetHeader.append(tweetHandle);
 
     //elements to plug into container
     let tweet = $("<span>").text(tweetObj["content"].text);
 
     //plug into container
-     $(tweetContainer).append(tweet);
+     tweetContainer.append(tweet);
 
     //elements to plug into footer
     let tweetDate = $("<span>").addClass("post-date").append(dateDifference(tweetObj["created_at"]));
@@ -81,11 +96,12 @@ $(document).ready(function() {
     let iconFlag = $("<i>").addClass("fa fa-flag");
     let iconRT = $("<i>").addClass("fa fa-retweet");
     let iconHeart = $("<i>").addClass("fa fa-heart");
-    tweetButtons.append(iconFlag, iconRT, iconHeart);
+    let likeButton = $("<a>").addClass("like").attr('id', 'unselected').append(iconHeart);
+    tweetButtons.append(iconFlag, iconRT, likeButton);
 
     //plug into footer
-    $(tweetFooter).append(tweetDate);
-    $(tweetFooter).append(tweetButtons);
+    tweetFooter.append(tweetDate);
+    tweetFooter.append(tweetButtons);
 
     //output
     let tweetArticle = $("<article>").addClass("tweet").append(tweetHeader);
@@ -94,7 +110,6 @@ $(document).ready(function() {
 
     return tweetArticle;
   }
-
 
   $('form[action="/tweets/"]').on('submit', function (event) {
     //Stop default submit behaviour
@@ -125,7 +140,6 @@ $(document).ready(function() {
       });
       $(this).find('textarea').val("");
     }
-
 
   });
 });
