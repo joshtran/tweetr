@@ -41,7 +41,7 @@ $(document).ready(function() {
 
   function loadTweets() {
     $.ajax({
-      url: 'http://localhost:8080/tweets',
+      url: '/tweets',
       method: 'GET',
       success: function (getTweets) {
         renderTweets(getTweets);
@@ -60,11 +60,12 @@ $(document).ready(function() {
       $('.display-tweet').prepend(currentTweet);
     }
     //Must wait for DOM elements to be generated before trying to access them for like button
-    $('.like').on('click', function() {
-      event.preventDefault();
-      $(this).attr('id', 'selected');
+    // $('.display-tweet').on('click', ".like", function() {
+    //   console.log("whee");
+    //   event.preventDefault();
+    //   $(this).attr('id', 'selected');
 
-    });
+    // });
   }
 
   function createTweetElement(tweetObj) {
@@ -124,12 +125,12 @@ $(document).ready(function() {
     } else {
       //Submit the form using Ajax
       $.ajax({
-        url: '/tweets/',
+        url: '/tweets',
         method: 'post',
         data: $(this).serialize()
       }).then(function loadTweets() {
         $.ajax({
-          url: 'http://localhost:8080/tweets',
+          url: '/tweets',
           method: 'GET',
           success: function (getTweets) {
             let inputArr = [];
@@ -142,4 +143,13 @@ $(document).ready(function() {
     }
 
   });
+
+
+  $('.display-tweet').on('click', '.like', function() {
+    console.log("whee.  ", this);
+    event.preventDefault();
+    $(this).attr('id', 'selected');
+
+  });
+
 });
