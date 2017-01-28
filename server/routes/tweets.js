@@ -5,6 +5,12 @@ const userHelper    = require("../lib/util/user-helper")
 const express       = require('express');
 const tweetsRoutes  = express.Router();
 
+//Function creates unique tweet id
+function generateRandomId() {
+  let tweetId = Math.random().toString(36).substr(2, 6);
+  return tweetId;
+}
+
 module.exports = function(DataHelpers) {
 
   tweetsRoutes.get("/", function(req, res) {
@@ -23,13 +29,17 @@ module.exports = function(DataHelpers) {
       return;
     }
 
+    console.log("tweet at route handler", req.body.text);
+
     const user = req.body.user ? req.body.user : userHelper.generateRandomUser();
     const tweet = {
       user: user,
       content: {
         text: req.body.text
       },
-      created_at: Date.now()
+      created_at: Date.now(),
+      tweet_id: generateRandomId(),
+      likes: 0
     };
 
     DataHelpers.saveTweet(tweet, (err) => {
@@ -40,6 +50,16 @@ module.exports = function(DataHelpers) {
       }
     });
   });
+
+  tweetsRoutes.put("/:id", function(req, res) {
+    let userId = req.params.id;
+    let likeStatus = req.body.likestatus;
+    console.log("like status at route handler", likeStatus);
+    DataHelpers.saveLike(userId, likeStatus, (err, count) => { if (err) {throw err;} });
+    res.status(201).send();
+  });
+
+
 
   return tweetsRoutes;
 

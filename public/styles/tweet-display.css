@@ -1,6 +1,3 @@
-#selected {
-  color: #faa1d5; }
-
 article.tweet {
   border: 1px solid #ccc;
   margin: 20px 2em auto;
@@ -50,10 +47,19 @@ article.tweet {
     article.tweet .buttons a {
       color: #24cec1;
       cursor: pointer; }
+    article.tweet .buttons #selected {
+      color: #faa1d5; }
     article.tweet .buttons a:hover {
       color: #faa1d5; }
     article.tweet .buttons i {
       margin-left: 3px; }
+  article.tweet #likes-hidden {
+    display: none; }
+  article.tweet #likes-shown {
+    display: initial;
+    margin-left: 2px;
+    font-weight: 900;
+    color: #faa1d5; }
 
 article.tweet:hover header {
   opacity: 1.0;

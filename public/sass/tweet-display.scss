@@ -79,6 +79,17 @@ article.tweet {
     }
   }
 
+  #likes-hidden {
+    display: none;
+  }
+
+  #likes-shown {
+    display: initial;
+    margin-left: 2px;
+    font-weight: 900;
+    color: #faa1d5;
+  }
+
 }
 
 

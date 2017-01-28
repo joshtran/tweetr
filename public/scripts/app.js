@@ -59,13 +59,6 @@ $(document).ready(function() {
       // takes return value and appends it to the tweets container
       $('.display-tweet').prepend(currentTweet);
     }
-    //Must wait for DOM elements to be generated before trying to access them for like button
-    // $('.display-tweet').on('click', ".like", function() {
-    //   console.log("whee");
-    //   event.preventDefault();
-    //   $(this).attr('id', 'selected');
-
-    // });
   }
 
   function createTweetElement(tweetObj) {
@@ -89,7 +82,7 @@ $(document).ready(function() {
     let tweet = $("<span>").text(tweetObj["content"].text);
 
     //plug into container
-     tweetContainer.append(tweet);
+    tweetContainer.append(tweet);
 
     //elements to plug into footer
     let tweetDate = $("<span>").addClass("post-date").append(dateDifference(tweetObj["created_at"]));
@@ -98,7 +91,14 @@ $(document).ready(function() {
     let iconRT = $("<i>").addClass("fa fa-retweet");
     let iconHeart = $("<i>").addClass("fa fa-heart");
     let likeButton = $("<a>").addClass("like").attr('id', 'unselected').append(iconHeart);
-    tweetButtons.append(iconFlag, iconRT, likeButton);
+    let likeCounter = $("<span>").addClass("like-counter").attr('id', 'likes-hidden');
+    let likeTotal = tweetObj["likes"];
+    if (likeTotal) {
+      likeCounter.attr('id', 'likes-shown');
+      likeCounter.append(likeTotal);
+    }
+
+    tweetButtons.append(iconFlag, iconRT, likeButton, likeCounter);
 
     //plug into footer
     tweetFooter.append(tweetDate);
@@ -108,6 +108,12 @@ $(document).ready(function() {
     let tweetArticle = $("<article>").addClass("tweet").append(tweetHeader);
     tweetArticle.append(tweetContainer);
     tweetArticle.append(tweetFooter);
+    let userId = tweetObj["_id"];
+    tweetArticle.attr('data-userid', userId)
+    let tweetId = tweetObj["tweet_id"];
+    if (tweetId) {
+      tweetArticle.attr('id', tweetId)
+    }
 
     return tweetArticle;
   }
@@ -115,6 +121,7 @@ $(document).ready(function() {
   $('form[action="/tweets/"]').on('submit', function (event) {
     //Stop default submit behaviour
     event.preventDefault();
+    console.log($(this).serialize());
     //Validation variable
     let $submission = $(this).find('textarea').val().length
     //Validate submission
@@ -133,9 +140,10 @@ $(document).ready(function() {
           url: '/tweets',
           method: 'GET',
           success: function (getTweets) {
-            let inputArr = [];
-            inputArr.push(getTweets[getTweets.length - 1]);
-            renderTweets(inputArr);
+            // let inputArr = [];
+            // inputArr.push(getTweets[getTweets.length - 1]);
+            $('.display-tweet').html('');
+            renderTweets(getTweets);
           }
         });
       });
@@ -145,10 +153,50 @@ $(document).ready(function() {
   });
 
 
+  let likestatus = false;
+  //Like button functionality
   $('.display-tweet').on('click', '.like', function() {
-    console.log("whee.  ", this);
     event.preventDefault();
-    $(this).attr('id', 'selected');
+    let userId = $(this).closest('article').attr('data-userid');
+    console.log(typeof userId)
+    console.log("userId on post", userId);
+    let tweetId = $(this).closest('article').attr('id');
+
+    //If unselected, change to selected
+    if ($(this).attr('id') === 'unselected') {
+      //Change color of like button
+      $(this).attr('id', 'selected');
+      //Set like status
+      likestatus = true;
+      //Set data attribute
+      $(this).closest('.tweet').data('tweetlikeid', $(this).closest('.tweet'));
+      //Update like counter on server
+
+    } else {
+      //Unchange color of like button
+      $(this).attr('id', 'unselected');
+      //Re-set like status
+      likestatus = false;
+      //Remove data attribute
+      $(this).closest('.tweet').removeAttr('data-tweeter-like-id');
+    }
+
+    $.ajax({
+        url: `/tweets/${userId}`,
+        method: 'put',
+        data: {likestatus: likestatus}
+      });
+
+    // .then(function loadTweets() {
+    //     $.ajax({
+    //       url: '/tweets',
+    //       method: 'GET',
+    //       success: function (getTweets) {
+    //         $('.display-tweet').html('');
+    //         renderTweets(getTweets);
+    //       }
+    //     });
+    //   });
 
   });
 
